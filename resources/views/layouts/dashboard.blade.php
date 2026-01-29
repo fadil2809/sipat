@@ -17,7 +17,7 @@
         }
 
         body {
-            background: #f1f5f9;
+            background: #e5e7eb;
             display: flex;
             min-height: 100vh;
         }
@@ -25,28 +25,34 @@
         /* SIDEBAR */
         .sidebar {
             width: 260px;
-            background: #020617;
+            background: linear-gradient(180deg, #020617, #0f172a);
             color: white;
             padding: 30px 20px;
         }
 
         .sidebar h2 {
-            font-size: 20px;
-            margin-bottom: 30px;
+            font-size: 18px;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #93c5fd;
         }
 
         .sidebar a {
-            display: block;
+            display: flex;
+            align-items: center;
             color: #e5e7eb;
             text-decoration: none;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 8px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
             font-size: 14px;
+            transition: all .2s ease;
         }
 
         .sidebar a:hover {
             background: #1e293b;
+            padding-left: 22px;
         }
 
         /* CONTENT */
@@ -57,32 +63,48 @@
         }
 
         header {
-            background: white;
+            background: #0f172a;
             padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .05);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .15);
+        }
+
+        header h3 {
+            font-weight: 600;
+            font-size: 18px;
         }
 
         header form button {
-            background: #dc2626;
+            background: #2563eb;
             border: none;
             color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 10px 18px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 13px;
+        }
+
+        header form button:hover {
+            background: #1d4ed8;
         }
 
         main {
-            padding: 30px;
+            padding: 35px;
         }
 
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, .1);
+        }
+
+        .card h3 {
+            margin-bottom: 20px;
+            color: #0f172a;
         }
     </style>
 </head>
@@ -97,9 +119,9 @@
 
         {{-- ADMIN --}}
         @if (auth()->user()->role === 'admin')
-            <a href="/admin/users">User</a>
-            <a href="/admin/kategori">Kategori</a>
-            <a href="/admin/alat">Alat</a>
+            <a href="/admin/users">Manajemen User</a>
+            <a href="/admin/kategori">Kategori Alat</a>
+            <a href="/admin/alat">Data Alat</a>
             <a href="/admin/peminjaman">Peminjaman</a>
             <a href="/admin/pengembalian">Pengembalian</a>
             <a href="/admin/log-aktivitas">Log Aktivitas</a>
@@ -107,17 +129,15 @@
 
         {{-- PETUGAS --}}
         @if (auth()->user()->role === 'petugas')
-            <a href="/petugas/menyetujui-peminjaman">Menujui Peminjaman</a>
-            <a href="/petugas/memantau-pengembalian">Memantau Pengembalian</a>
-            <a href="/petugas/laporan-peminjaman">Mencetak Laporan</a>
+            <a href="/petugas/menyetujui-peminjaman">Persetujuan Peminjaman</a>
+            <a href="/petugas/memantau-pengembalian">Monitoring Pengembalian</a>
+            <a href="/petugas/laporan-peminjaman">Laporan Peminjaman</a>
         @endif
 
         {{-- PEMINJAM --}}
         @if (auth()->user()->role === 'peminjam')
             <a href="{{ route('peminjam.peminjaman.create') }}">Ajukan Peminjaman</a>
-                <a href="{{ route('peminjam.peminjaman.index') }}">
-                    Riwayat Peminjaman
-                </a>
+            <a href="{{ route('peminjam.peminjaman.index') }}">Riwayat Peminjaman</a>
         @endif
     </div>
 
