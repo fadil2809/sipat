@@ -51,4 +51,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Peminjaman::class);
     }
+
+    public function logAktivitas()
+{
+    return $this->hasMany(LogAktivitas::class);
+}
+
 }

@@ -62,7 +62,7 @@ class PeminjamanController extends Controller
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aktivitas' => 'Admin menambahkan data peminjaman',
+            'aktivitas' => 'Menambahkan data peminjaman alat',
         ]);
 
         return redirect()

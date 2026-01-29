@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Peminjam;
 
 use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
+use App\Models\LogAktivitas;
 use App\Models\Alat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,10 @@ class PeminjamanController extends Controller
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'tanggal_jatuh_tempo' => $request->tanggal_jatuh_tempo,
             'status' => 'dipinjam',
+        ]);
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => 'Mengajukan peminjaman alat',
         ]);
 
         $alat->decrement('stok');

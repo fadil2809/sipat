@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
-use Illuminate\Http\Request;
+use App\Models\LogAktivitas;
 use Carbon\Carbon;
 
 class PengembalianController extends Controller
@@ -18,7 +18,7 @@ class PengembalianController extends Controller
         return view('admin.pengembalian.index', compact('peminjamans'));
     }
 
-    public function store($id)
+    public function kembalikan($id)
     {
         $peminjaman = Peminjaman::with('alat')->findOrFail($id);
 
@@ -26,13 +26,20 @@ class PengembalianController extends Controller
             return back()->with('error', 'Alat sudah dikembalikan');
         }
 
+        // UPDATE STATUS
         $peminjaman->update([
             'status' => 'dikembalikan',
             'tanggal_kembali' => Carbon::now(),
         ]);
 
-        // tambah stok alat
+        // TAMBAH STOK
         $peminjaman->alat->increment('stok');
+
+        // LOG AKTIVITAS
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => 'Admin mengonfirmasi pengembalian alat',
+        ]);
 
         return back()->with('success', 'Pengembalian berhasil');
     }

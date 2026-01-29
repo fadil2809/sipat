@@ -1,25 +1,24 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Pengembalian Alat')
+@section('title', 'Menyetujui Peminjaman')
 
 @section('content')
-<h2>Pengembalian Alat</h2>
+<h3>Daftar Peminjaman Menunggu</h3>
 
-@if (session('success'))
+@if(session('success'))
     <p style="color:green">{{ session('success') }}</p>
 @endif
 
-@if (session('error'))
+@if(session('error'))
     <p style="color:red">{{ session('error') }}</p>
 @endif
 
-<table border="1" cellpadding="10" width="100%">
+<table border="1" cellpadding="8" width="100%">
     <tr>
         <th>No</th>
         <th>Peminjam</th>
         <th>Alat</th>
-        <th>Tanggal Pinjam</th>
-        <th>Jatuh Tempo</th>
+        <th>Tgl Pinjam</th>
         <th>Aksi</th>
     </tr>
 
@@ -29,12 +28,11 @@
         <td>{{ $p->user->name }}</td>
         <td>{{ $p->alat->nama_alat }}</td>
         <td>{{ $p->tanggal_pinjam }}</td>
-        <td>{{ $p->tanggal_jatuh_tempo }}</td>
         <td>
-            <form method="POST" action="{{ route('admin.pengembalian.kembalikan', $p->id) }}">
+            <form action="{{ route('petugas.setujui', $p->id) }}" method="POST">
                 @csrf
-                <button onclick="return confirm('Konfirmasi pengembalian?')">
-                    Kembalikan
+                <button onclick="return confirm('Setujui peminjaman?')">
+                    Setujui
                 </button>
             </form>
         </td>

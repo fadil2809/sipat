@@ -109,7 +109,7 @@
         @if (auth()->user()->role === 'petugas')
             <a href="/petugas/menyetujui-peminjaman">Menujui Peminjaman</a>
             <a href="/petugas/memantau-pengembalian">Memantau Pengembalian</a>
-            <a href="/petugas/mencetak-laporan">Mencetak Laporan</a>
+            <a href="/petugas/laporan-peminjaman">Mencetak Laporan</a>
         @endif
 
         {{-- PEMINJAM --}}

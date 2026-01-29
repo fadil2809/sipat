@@ -3,12 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+// =======================
 // DASHBOARD
+// =======================
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Petugas\DashboardController as PetugasDashboard;
 use App\Http\Controllers\Peminjam\DashboardController as PeminjamDashboard;
 
+// =======================
 // ADMIN
+// =======================
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\AlatController;
@@ -16,7 +20,14 @@ use App\Http\Controllers\Admin\PeminjamanController;
 use App\Http\Controllers\Admin\PengembalianController;
 use App\Http\Controllers\Admin\LogAktivitasController;
 
+// =======================
+// PETUGAS
+// =======================
+use App\Http\Controllers\Petugas\PetugasController;
+
+// =======================
 // PEMINJAM
+// =======================
 use App\Http\Controllers\Peminjam\PeminjamanController as PeminjamPeminjaman;
 
 /*
@@ -24,7 +35,6 @@ use App\Http\Controllers\Peminjam\PeminjamanController as PeminjamPeminjaman;
 | LANDING & AUTH
 |--------------------------------------------------------------------------
 */
-
 Route::get('/', function () {
     return view('landing');
 });
@@ -41,7 +51,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD BY ROLE (WAJIB UKK)
+| DASHBOARD BERDASARKAN ROLE (WAJIB UKK)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:admin'])
@@ -66,28 +76,52 @@ Route::middleware(['auth', 'role:peminjam'])
     ->name('peminjam.')
     ->group(function () {
 
-        // LIHAT PEMINJAMAN
         Route::get('/peminjaman', [PeminjamPeminjaman::class, 'index'])
             ->name('peminjaman.index');
 
-        // FORM PINJAM
         Route::get('/peminjaman/create', [PeminjamPeminjaman::class, 'create'])
             ->name('peminjaman.create');
 
-        // SIMPAN PINJAM
         Route::post('/peminjaman', [PeminjamPeminjaman::class, 'store'])
             ->name('peminjaman.store');
 
-        // KEMBALIKAN ALAT (HANYA PEMINJAM)
-        Route::post(
-            '/peminjaman/{id}/kembalikan',
-            [PeminjamPeminjaman::class, 'kembalikan']
-        )->name('peminjaman.kembalikan');
+        Route::post('/peminjaman/{id}/kembalikan', [PeminjamPeminjaman::class, 'kembalikan'])
+            ->name('peminjaman.kembalikan');
     });
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN (MASTER DATA + PEMINJAMAN + MONITOR PENGEMBALIAN)
+| PETUGAS (SETUJUI PEMINJAMAN & MONITOR PENGEMBALIAN)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:petugas'])
+    ->prefix('petugas')
+    ->name('petugas.')
+    ->group(function () {
+
+        Route::get('/menyetujui-peminjaman', [PetugasController::class, 'menyetujuiPeminjaman'])
+            ->name('menyetujui-peminjaman');
+
+        Route::post('/setujui/{id}', [PetugasController::class, 'setujui'])
+            ->name('setujui');
+
+        Route::get('/memantau-pengembalian', [PetugasController::class, 'memantauPengembalian'])
+            ->name('memantau-pengembalian');
+            
+        Route::get(
+            '/laporan-peminjaman',
+            [PetugasController::class, 'laporanPeminjaman']
+        )->name('laporan-peminjaman');
+
+        Route::get(
+            '/laporan-peminjaman/cetak',
+            [PetugasController::class, 'cetakLaporan']
+        )->name('laporan-peminjaman.cetak');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN (MASTER DATA + PEMINJAMAN + PENGEMBALIAN + LOG)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:admin'])
@@ -100,10 +134,10 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('kategori', KategoriController::class);
         Route::resource('alat', AlatController::class);
 
-        // PEMINJAMAN (CRUD)
+        // PEMINJAMAN
         Route::resource('peminjaman', PeminjamanController::class);
 
-        // PENGEMBALIAN (ADMIN HANYA LIHAT / KONFIRMASI)
+        // PENGEMBALIAN
         Route::get('/pengembalian', [PengembalianController::class, 'index'])
             ->name('pengembalian.index');
 
@@ -111,6 +145,6 @@ Route::middleware(['auth', 'role:admin'])
             ->name('pengembalian.kembalikan');
 
         // LOG AKTIVITAS
-        Route::get('admin/log-aktivitas', [LogAktivitasController::class, 'index'])
-            ->name('admin.log.index');
+        Route::get('/log-aktivitas', [LogAktivitasController::class, 'index'])
+            ->name('log-aktivitas.index');
     });
