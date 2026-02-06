@@ -14,6 +14,7 @@
                 <th>No</th>
                 <th>Peminjam</th>
                 <th>Alat</th>
+                <th>Gambar Alat</th>
                 <th>Tanggal Pinjam</th>
                 <th>Jatuh Tempo</th>
             </tr>
@@ -24,6 +25,18 @@
                 <td>{{ $loop->iteration }}</td>
                 <td class="text-start">{{ $p->user->name }}</td>
                 <td class="text-start">{{ $p->alat->nama_alat }}</td>
+
+                {{-- KOLOM GAMBAR ALAT --}}
+                <td>
+                    @if ($p->alat->gambar_alat)
+                        <img src="{{ asset('storage/'.$p->alat->gambar_alat) }}"
+                             width="80"
+                             class="img-thumbnail">
+                    @else
+                        <span class="text-muted">Tidak ada gambar</span>
+                    @endif
+                </td>
+
                 <td>{{ $p->tanggal_pinjam }}</td>
                 <td>{{ $p->tanggal_jatuh_tempo }}</td>
             </tr>

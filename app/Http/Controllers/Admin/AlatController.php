@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Alat;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AlatController extends Controller
 {
@@ -25,17 +26,31 @@ class AlatController extends Controller
     {
         $request->validate([
             'nama_alat'   => 'required|unique:alats,nama_alat',
+            'deskripsi'   => 'nullable|string',
             'stok'        => 'required|integer|min:0',
             'kategori_id' => 'required|exists:kategoris,id',
+            'gambar_alat' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        Alat::create($request->all());
+        $gambarPath = null;
+
+        if ($request->hasFile('gambar_alat')) {
+            $gambarPath = $request->file('gambar_alat')
+                ->store('gambar_alat', 'public');
+        }
+
+        Alat::create([
+            'nama_alat' => $request->nama_alat,
+            'deskripsi' => $request->deskripsi,
+            'stok' => $request->stok,
+            'kategori_id' => $request->kategori_id,
+            'gambar_alat' => $gambarPath,
+        ]);
 
         return redirect()
             ->route('admin.alat.index')
             ->with('success', 'Alat berhasil ditambahkan');
     }
-
 
     public function edit($id)
     {
@@ -49,22 +64,47 @@ class AlatController extends Controller
     {
         $request->validate([
             'nama_alat'   => 'required|unique:alats,nama_alat,' . $id,
+            'deskripsi'   => 'nullable|string',
             'stok'        => 'required|integer|min:0',
             'kategori_id' => 'required|exists:kategoris,id',
+            'gambar_alat' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $alat = Alat::findOrFail($id);
-        $alat->update($request->all());
+
+        // Simpan data utama dulu
+        $alat->nama_alat = $request->nama_alat;
+        $alat->deskripsi = $request->deskripsi;
+        $alat->stok = $request->stok;
+        $alat->kategori_id = $request->kategori_id;
+
+        // Jika ada gambar baru, hapus yang lama lalu simpan yang baru
+        if ($request->hasFile('gambar_alat')) {
+
+            if ($alat->gambar_alat) {
+                Storage::disk('public')->delete($alat->gambar_alat);
+            }
+
+            $alat->gambar_alat = $request->file('gambar_alat')
+                ->store('gambar_alat', 'public');
+        }
+
+        $alat->save();
 
         return redirect()
             ->route('admin.alat.index')
             ->with('success', 'Alat berhasil diupdate');
     }
 
-
     public function destroy($id)
     {
-        Alat::findOrFail($id)->delete();
+        $alat = Alat::findOrFail($id);
+
+        if ($alat->gambar_alat) {
+            Storage::disk('public')->delete($alat->gambar_alat);
+        }
+
+        $alat->delete();
 
         return redirect()
             ->route('admin.alat.index')

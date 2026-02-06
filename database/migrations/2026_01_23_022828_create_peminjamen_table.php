@@ -29,12 +29,15 @@
                 $table->enum('status', ['pending', 'dipinjam', 'dikembalikan'])
                     ->default('pending');
 
-
                 $table->integer('denda')->default(0);
+
+                // 👉 TAMBAHAN FOTO USER (IDENTITAS PEMINJAM)
+                $table->string('foto_peminjam')->nullable();
 
                 $table->timestamps();
             });
         }
+
 
         /**
          * Reverse the migrations.
