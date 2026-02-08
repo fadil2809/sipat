@@ -29,21 +29,22 @@ class AlatController extends Controller
             'deskripsi'   => 'nullable|string',
             'stok'        => 'required|integer|min:0',
             'kategori_id' => 'required|exists:kategoris,id',
+            'harga'       => 'required|integer|min:0', // 🔥 VALIDASI HARGA
             'gambar_alat' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $gambarPath = null;
-
         if ($request->hasFile('gambar_alat')) {
             $gambarPath = $request->file('gambar_alat')
                 ->store('gambar_alat', 'public');
         }
 
         Alat::create([
-            'nama_alat' => $request->nama_alat,
-            'deskripsi' => $request->deskripsi,
-            'stok' => $request->stok,
+            'nama_alat'   => $request->nama_alat,
+            'deskripsi'   => $request->deskripsi,
+            'stok'        => $request->stok,
             'kategori_id' => $request->kategori_id,
+            'harga'       => $request->harga, // 🔥 SIMPAN HARGA
             'gambar_alat' => $gambarPath,
         ]);
 
@@ -67,24 +68,24 @@ class AlatController extends Controller
             'deskripsi'   => 'nullable|string',
             'stok'        => 'required|integer|min:0',
             'kategori_id' => 'required|exists:kategoris,id',
+            'harga'       => 'required|integer|min:0', // 🔥 VALIDASI HARGA
             'gambar_alat' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $alat = Alat::findOrFail($id);
 
-        // Simpan data utama dulu
-        $alat->nama_alat = $request->nama_alat;
-        $alat->deskripsi = $request->deskripsi;
-        $alat->stok = $request->stok;
+        // Data utama
+        $alat->nama_alat   = $request->nama_alat;
+        $alat->deskripsi   = $request->deskripsi;
+        $alat->stok        = $request->stok;
         $alat->kategori_id = $request->kategori_id;
+        $alat->harga       = $request->harga; // 🔥 UPDATE HARGA
 
-        // Jika ada gambar baru, hapus yang lama lalu simpan yang baru
+        // Gambar
         if ($request->hasFile('gambar_alat')) {
-
             if ($alat->gambar_alat) {
                 Storage::disk('public')->delete($alat->gambar_alat);
             }
-
             $alat->gambar_alat = $request->file('gambar_alat')
                 ->store('gambar_alat', 'public');
         }

@@ -21,19 +21,35 @@
             <form method="POST" action="{{ route('admin.kategori.store') }}">
                 @csrf
 
+                {{-- Nama Kategori --}}
                 <div class="mb-3">
-                    <label class="form-label">Nama Kategori</label>
+                    <label class="form-label">
+                        Nama Kategori <span class="text-danger">*</span>
+                    </label>
                     <input type="text"
                            name="nama"
                            class="form-control"
-                           value="{{ old('nama') }}">
+                           value="{{ old('nama') }}"
+                           maxlength="50"
+                           required>
+                    <small class="text-muted">
+                        Wajib diisi, maksimal 50 karakter
+                    </small>
                 </div>
 
+                {{-- Deskripsi --}}
                 <div class="mb-3">
-                    <label class="form-label">Deskripsi</label>
+                    <label class="form-label">
+                        Deskripsi <span class="text-danger">*</span>
+                    </label>
                     <textarea name="deskripsi"
                               class="form-control"
-                              rows="3">{{ old('deskripsi') }}</textarea>
+                              rows="3"
+                              maxlength="255"
+                              required>{{ old('deskripsi') }}</textarea>
+                    <small class="text-muted">
+                        Wajib diisi, maksimal 255 karakter
+                    </small>
                 </div>
 
                 <div class="d-flex gap-2">

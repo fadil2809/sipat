@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 
-
 class KategoriController extends Controller
 {
     public function index()
@@ -23,8 +22,8 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|unique:kategoris,nama',
-            'deskripsi' => 'required',
+            'nama' => 'required|string|max:50|unique:kategoris,nama',
+            'deskripsi' => 'required|string|max:255',
         ]);
 
         Kategori::create([
@@ -32,7 +31,8 @@ class KategoriController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        return redirect()->route('admin.kategori.index')
+        return redirect()
+            ->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil ditambahkan');
     }
 
@@ -44,8 +44,8 @@ class KategoriController extends Controller
     public function update(Request $request, Kategori $kategori)
     {
         $request->validate([
-            'nama' => 'required|unique:kategoris,nama,' . $kategori->id,
-            'deskripsi' => 'required',
+            'nama' => 'required|string|max:50|unique:kategoris,nama,' . $kategori->id,
+            'deskripsi' => 'required|string|max:255',
         ]);
 
         $kategori->update([
@@ -53,20 +53,23 @@ class KategoriController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        return redirect()->route('admin.kategori.index')
+        return redirect()
+            ->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil diperbarui');
     }
 
     public function destroy(Kategori $kategori)
     {
         if ($kategori->alats()->count() > 0) {
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh alat');
         }
 
         $kategori->delete();
 
-        return redirect()->route('admin.kategori.index')
+        return redirect()
+            ->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil dihapus');
     }
 }
