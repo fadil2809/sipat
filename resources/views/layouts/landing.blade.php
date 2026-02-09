@@ -6,47 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Sistem Peminjaman Alat')</title>
 
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #1e3a8a;
-            --secondary: #2563eb;
-            --accent: #38bdf8;
-            --bg: #f1f5f9;
+            --primary: #0f172a;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --light-bg: #f8fafc;
         }
 
-        html,
-        body {
+        html, body {
             height: 100%;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg);
+            background: var(--light-bg);
             display: flex;
             flex-direction: column;
         }
 
         /* NAVBAR */
         .navbar-custom {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
-        .navbar-custom .nav-link,
-        .navbar-custom .navbar-brand {
-            color: #fff;
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary) !important;
+        }
+
+        .nav-link {
+            color: #334155 !important;
             font-weight: 500;
+            transition: 0.3s;
         }
 
-        /* CONTENT WRAPPER */
-        .page-wrapper {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 16px;
+        .nav-link:hover {
+            color: var(--secondary) !important;
+        }
+
+        .btn-register {
+            background: var(--secondary);
+            color: #fff;
+            border-radius: 10px;
+            padding: 6px 16px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .btn-register:hover {
+            background: var(--accent);
+            color: #fff;
         }
 
         /* HERO */
@@ -56,11 +73,9 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background:
-                radial-gradient(circle at top, #60a5fa, transparent),
-                linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
             color: #fff;
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
 
         .hero h1 {
@@ -69,37 +84,42 @@
         }
 
         .hero p {
-            font-size: 1.25rem;
-            opacity: .95;
+            font-size: 1.15rem;
             max-width: 600px;
             margin: 20px auto 30px;
+            opacity: 0.95;
         }
 
-        /* BUTTON */
         .btn-primary-custom {
-            background: linear-gradient(135deg, var(--secondary), var(--accent));
-            border: none;
-            color: #fff;
-            padding: 12px 28px;
+            background: #ffffff;
+            color: var(--secondary);
             border-radius: 12px;
+            padding: 12px 28px;
             font-weight: 600;
-            transition: .3s;
-            box-shadow: 0 10px 25px rgba(37, 99, 235, .35);
+            transition: 0.3s;
         }
 
         .btn-primary-custom:hover {
+            background: #f1f5f9;
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(37, 99, 235, .45);
         }
 
         /* AUTH CARD */
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 16px;
+        }
+
         .card-auth {
-            background: #fff;
-            border-radius: 20px;
-            padding: 45px;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 40px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 30px 60px rgba(30, 58, 138, .15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
         }
 
         .card-auth h2 {
@@ -108,8 +128,13 @@
         }
 
         .form-control {
-            border-radius: 12px;
-            padding: 12px 14px;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
         }
 
         .error-message {
@@ -127,12 +152,16 @@
             text-decoration: none;
         }
 
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
         /* FOOTER */
         footer {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            color: #fff;
+            background: #0f172a;
+            color: #cbd5e1;
             text-align: center;
-            padding: 16px 0;
+            padding: 18px 0;
             font-size: 14px;
         }
     </style>
@@ -142,29 +171,42 @@
 
 <body>
 
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-custom px-4 px-lg-5">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/">Peminjaman Alat</a>
-            <div class="collapse navbar-collapse justify-content-end">
-                <ul class="navbar-nav gap-3 align-items-center">
-                    <li><a class="nav-link" href="/">Home</a></li>
-                    <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                    <li>
-                        <a class="btn btn-outline-light btn-sm" href="{{ route('register') }}">Register</a>
+            <a class="navbar-brand" href="/">Sistem Peminjaman</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-lg-center gap-lg-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-register btn-sm" href="{{ route('register') }}">Register</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- CONTENT -->
     @yield('content')
 
+    <!-- FOOTER -->
     <footer>
-        © {{ date('Y') }} Sistem Peminjaman Alat
+        © {{ date('Y') }} Sistem Peminjaman Alat • All Rights Reserved
     </footer>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
-</body>
 
+</body>
 </html>

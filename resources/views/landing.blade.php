@@ -3,16 +3,79 @@
 @section('title', 'Beranda')
 
 @section('content')
-    <section class="hero">
-        <div>
-            <h1>Sistem Peminjaman Alat</h1>
-            <p>
-                Platform digital untuk mengelola peminjaman alat secara efisien,
-                transparan, dan terintegrasi.
-            </p>
-            <a href="{{ route('login') }}" class="btn btn-lg btn-primary-custom">
-                Mulai Sekarang
-            </a>
+<style>
+    .hero-section {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #4e73df, #6f42c1);
+        color: white;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    .hero-text {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .btn-custom {
+        background-color: #ffffff;
+        color: #4e73df;
+        border-radius: 30px;
+        padding: 10px 30px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-3px);
+    }
+
+    .feature-box {
+        padding: 20px;
+        border-radius: 15px;
+        background: #f8f9fa;
+        transition: 0.3s;
+    }
+
+    .feature-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+</style>
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            
+            <!-- Text -->
+            <div class="col-md-6">
+                <h1 class="hero-title">
+                    Kelola Peminjaman Alat <br> Lebih Mudah & Cepat
+                </h1>
+                <p class="hero-text mt-3">
+                    Sistem berbasis web untuk memantau peminjaman,
+                    pengembalian, dan data pengguna secara real-time.
+                </p>
+                <a href="{{ route('login') }}" class="btn btn-custom mt-4">
+                    Login Sekarang
+                </a>
+            </div>
+
+            <!-- Visual -->
+            <div class="col-md-6 text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" 
+                     alt="Ilustrasi"
+                     class="img-fluid"
+                     style="max-height: 350px;">
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 @endsection

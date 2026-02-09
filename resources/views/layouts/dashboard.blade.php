@@ -13,42 +13,48 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
-        :root {
-            --primary: #1e3a8a;
-            --secondary: #2563eb;
-            --accent: #38bdf8;
-            --bg: #f1f5f9;
-            --dark: #0f172a;
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg);
+            background: #f4f6f9;
             min-height: 100vh;
             display: flex;
         }
 
-        /* SIDEBAR */
+        /* ================= SIDEBAR ================= */
+
         .sidebar {
             width: 260px;
-            background: linear-gradient(180deg, var(--primary), var(--secondary));
             color: #fff;
             padding: 30px 20px;
+            transition: .3s;
+        }
+
+        /* WARNA BERDASARKAN ROLE */
+        .admin-sidebar {
+            background: linear-gradient(180deg, #7f1d1d, #b91c1c);
+        }
+
+        .petugas-sidebar {
+            background: linear-gradient(180deg, #065f46, #10b981);
+        }
+
+        .peminjam-sidebar {
+            background: linear-gradient(180deg, #4c1d95, #7c3aed);
         }
 
         .sidebar h2 {
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             text-align: center;
             letter-spacing: 1px;
             margin-bottom: 30px;
-            opacity: .9;
+            opacity: .85;
         }
 
         .sidebar a,
         .sidebar .dropdown-toggle {
             display: block;
-            color: #e5e7eb;
+            color: #f1f5f9;
             text-decoration: none;
             padding: 12px 16px;
             border-radius: 12px;
@@ -75,27 +81,27 @@
             color: #fff;
         }
 
-        /* CONTENT */
+        /* ================= CONTENT ================= */
+
         .content {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
-        /* HEADER */
         header {
-            background: #fff;
+            background: #ffffff;
             padding: 18px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
         }
 
         header h5 {
             margin: 0;
             font-weight: 600;
-            color: var(--primary);
+            color: #333;
         }
 
         main {
@@ -104,10 +110,10 @@
         }
 
         .card-custom {
-            background: #fff;
+            background: #ffffff;
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(30, 58, 138, .12);
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .05);
         }
     </style>
 
@@ -116,15 +122,29 @@
 
 <body>
 
-    {{-- SIDEBAR --}}
-    <aside class="sidebar">
-        <h2>{{ ucfirst(auth()->user()->role) }}</h2>
+    @php
+        $role = auth()->user()->role;
+        $sidebarClass = '';
 
-        <a href="/{{ auth()->user()->role }}/dashboard">
+        if ($role === 'admin') {
+            $sidebarClass = 'admin-sidebar';
+        } elseif ($role === 'petugas') {
+            $sidebarClass = 'petugas-sidebar';
+        } elseif ($role === 'peminjam') {
+            $sidebarClass = 'peminjam-sidebar';
+        }
+    @endphp
+
+    {{-- SIDEBAR --}}
+    <aside class="sidebar {{ $sidebarClass }}">
+        <h2>{{ ucfirst($role) }}</h2>
+
+        <a href="/{{ $role }}/dashboard">
             <i class="bi bi-speedometer2 me-2"></i> Dashboard
         </a>
 
-        @if (auth()->user()->role === 'admin')
+        {{-- ================= ADMIN ================= --}}
+        @if ($role === 'admin')
             <a href="/admin/users"><i class="bi bi-people me-2"></i> Manajemen User</a>
             <a href="/admin/kategori"><i class="bi bi-tags me-2"></i> Kategori Alat</a>
             <a href="/admin/alat"><i class="bi bi-tools me-2"></i> Data Alat</a>
@@ -132,10 +152,10 @@
             <a href="/admin/pengembalian"><i class="bi bi-box-arrow-in-down me-2"></i> Pengembalian</a>
             <a href="{{ route('admin.pengembalian.rekap') }}"><i class="bi bi-clipboard-data me-2"></i> Rekap</a>
             <a href="/admin/log-aktivitas"><i class="bi bi-clock-history me-2"></i> Log Aktivitas</a>
-
         @endif
 
-        @if (auth()->user()->role === 'petugas')
+        {{-- ================= PETUGAS ================= --}}
+        @if ($role === 'petugas')
             <a href="{{ route('petugas.persetujuan') }}"><i class="bi bi-check2-square me-2"></i> Persetujuan</a>
             <a href="{{ route('petugas.pemantauan') }}"><i class="bi bi-eye me-2"></i> Monitoring</a>
             <a href="{{ route('petugas.pemeriksaan') }}"><i class="bi bi-search me-2"></i> Pemeriksaan</a>
@@ -152,7 +172,8 @@
             </div>
         @endif
 
-        @if (auth()->user()->role === 'peminjam')
+        {{-- ================= PEMINJAM ================= --}}
+        @if ($role === 'peminjam')
             <a href="{{ route('peminjam.pengajuan.create') }}"><i class="bi bi-plus-circle me-2"></i> Ajukan</a>
             <a href="{{ route('peminjam.riwayat') }}"><i class="bi bi-clock-history me-2"></i> Riwayat</a>
         @endif
