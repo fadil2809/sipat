@@ -71,7 +71,7 @@
                     <div class="mb-3">
                         <label class="form-label">Jumlah</label>
                         <input type="number" name="jumlah" id="jumlah" class="form-control"
-                            value="{{ old('jumlah', $peminjaman->jumlah) }}" min="1" required>
+                            value="{{ old('jumlah', $peminjaman->jumlah) }}" >
                     </div>
 
                     {{-- TANGGAL --}}

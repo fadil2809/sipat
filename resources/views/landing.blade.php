@@ -8,7 +8,7 @@
         min-height: 90vh;
         display: flex;
         align-items: center;
-        background: linear-gradient(135deg, #4e73df, #6f42c1);
+        background: linear-gradient(135deg, #24272c, #636363);
         color: white;
     }
 
@@ -56,11 +56,11 @@
             <!-- Text -->
             <div class="col-md-6">
                 <h1 class="hero-title">
-                    Kelola Peminjaman Alat <br> Lebih Mudah & Cepat
+                    Sistem Peminjaman Alat. <br> Lebih Mudah & Cepat
                 </h1>
                 <p class="hero-text mt-3">
                     Sistem berbasis web untuk memantau peminjaman,
-                    pengembalian, dan data pengguna secara real-time.
+                    pengembalian, dan peminjaman alat data. penggunaan secara real-time.
                 </p>
                 <a href="{{ route('login') }}" class="btn btn-custom mt-4">
                     Login Sekarang
@@ -69,7 +69,7 @@
 
             <!-- Visual -->
             <div class="col-md-6 text-center">
-                <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" 
+                <img src="logosipat23.png" 
                      alt="Ilustrasi"
                      class="img-fluid"
                      style="max-height: 350px;">
